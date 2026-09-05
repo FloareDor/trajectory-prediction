@@ -1,0 +1,8 @@
+seed: 0
+history_steps: 10
+future_steps: 20
+train_samples: 76
+validation_samples: 20
+hidden_size: 64
+epochs: 20
+learning_rate: 0.001

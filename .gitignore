@@ -1,0 +1,23 @@
+.venv/
+.venv-waymo/
+.tmp-waymo/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+data/raw/
+data/processed/
+artifacts/
+*.egg-info/
+pygame_motion_lab/
+
+# Generated experiment outputs are kept out of Git. The compact final reports
+# and figures are tracked separately as project documentation.
+experiments/**
+!experiments/README.md
+!experiments/av2_ablation_60k/
+!experiments/av2_ablation_60k/progress.md
+!experiments/av2_ablation_60k/final/
+!experiments/av2_ablation_60k/final/aggregate.csv
+!experiments/av2_ablation_60k/final/aggregate.json
+!experiments/av2_ablation_60k/final/aggregate.md

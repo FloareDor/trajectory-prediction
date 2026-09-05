@@ -1,0 +1,29 @@
+experiment_dir: experiments/waymo_ablation
+
+cache:
+  train_manifest: data/processed/waymo/train-manifest.json
+  validation_manifest: data/processed/waymo/validation-manifest.json
+
+split_salt: waymo-motion-ablation-v1
+
+screen:
+  train_targets: 10000
+  dev_targets: 2000
+  seeds: [17]
+
+final:
+  train_targets: 50000
+  dev_targets: 10000
+  seeds: [17, 29, 43]
+
+training:
+  batch_size: 32
+  gradient_accumulation: 2
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  epochs: 40
+  warmup_fraction: 0.05
+  early_stopping_patience: 6
+  gradient_clip: 1.0
+  mixed_precision: true
+  num_workers: 0

@@ -1,0 +1,5 @@
+# use this file in a python 3.10 linux/wsl environment
+numpy==1.23
+tensorflow==2.12.0
+waymo-open-dataset-tf-2-12-0==1.6.3
+-e .
