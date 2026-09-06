@@ -72,20 +72,22 @@ macro minADE is the main result, so the paired confidence intervals are below. t
 
 for A0 to A6, Brier-minFDE is exactly minFDE because they only predict one path. it adds new information for A7: its final minFDE is 3.404 m, while Brier-minFDE is 3.943 m because the model did not always score the best endpoint most highly.
 
-![Paired effects of context and multiple modes](docs/figures/component_effects.png)
+![Paired minADE changes](docs/figures/component_effects.png)
+
+the A6 to A7 row is different from the others. A7 gets 6 guesses and minADE picks the closest one after seeing what really happened. so it only says the 6 paths cover more possible futures. it does not mean A7 knew which path would happen.
 
 | Change | Difference in macro minADE | Paired 95% interval | Result |
 |---|---:|---:|---|
 | A3 to A4: add neighbors | -0.0671 | [-0.0856, -0.0492] | better |
 | A3 to A5: add map | -0.2374 | [-0.2709, -0.2070] | better |
 | A3 to A6: add both | -0.2536 | [-0.2855, -0.2241] | better |
-| A6 to A7: use six modes | -0.8296 | [-0.8607, -0.7996] | better |
+| A6 to A7: use six modes | -0.8296 | [-0.8607, -0.7996] | more coverage |
 
 ## what i found
 
 the map helped more than nearby agents. both together beat the target-only transformer by 0.2536 m.
 
-the 6 paths helped the most. A7 got **1.152 m** and A6 got **1.981 m**. but A7 was worse at picking its first choice: 3.391 m vs 2.910 m. it found good paths, it just did not rank them that well.
+A7 has 6 guesses, so of course its best guess gets a lower minADE: **1.152 m** vs **1.981 m** for A6. that is just coverage. its first choice was worse, 3.391 m vs 2.910 m, so it was not actually better at choosing what would happen.
 
 this is only my 60k split, not the official AV2 benchmark. [full results](experiments/av2_ablation_60k/final/aggregate.md)
 
