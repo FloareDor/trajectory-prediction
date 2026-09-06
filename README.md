@@ -56,7 +56,15 @@ the next figure has endpoint metrics. [full table](experiments/av2_ablation_60k/
 
 ![Final endpoint, ranking, and miss-rate metrics](docs/figures/endpoint_metrics.png)
 
-for A0 to A6, Brier-minFDE equals minFDE because they only predict one path. A7 gets 3.404 m minFDE and 3.943 m Brier-minFDE, so it did not rank the best endpoint very well.
+for A0 to A6, Brier-minFDE equals minFDE because they only predict one path. A7 gets 3.404 m minFDE and 3.943 m Brier-minFDE. the gap is the penalty for not putting all its score on the best endpoint.
+
+![A7 error when keeping its one through six highest-scored paths](docs/figures/a7_topk_coverage.png)
+
+keeping more of A7's guesses lowers both errors. that is coverage after we allow more guesses, not A7 knowing which path would happen.
+
+![A7 score calibration](docs/figures/a7_calibration.png)
+
+the scores are fairly calibrated: a path with a higher score is usually more likely to be the closest endpoint. but A7's first path is still often not the best one.
 
 ![Paired minADE changes](docs/figures/component_effects.png)
 
@@ -68,6 +76,10 @@ the A6 to A7 row is different from the others. A7 gets 6 guesses and minADE pick
 | A3 to A5: add map | -0.2374 | [-0.2709, -0.2070] | better |
 | A3 to A6: add both | -0.2536 | [-0.2855, -0.2241] | better |
 | A6 to A7: use six modes | -0.8296 | [-0.8607, -0.7996] | more coverage |
+
+![Where nearby agents and map data help](docs/figures/context_by_situation.png)
+
+the map helps most on turns and intersections. nearby agents are more mixed.
 
 ## what i found
 
