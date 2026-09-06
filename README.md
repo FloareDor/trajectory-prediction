@@ -2,11 +2,9 @@
 
 ## what this is
 
-i did this project to study motion prediction in autonomous-driving scenes. the goal is to predict where a vehicle, pedestrian, or cyclist might move next.
+i predict the next 6 seconds from 5 seconds of motion. i test whether nearby agents and road-map data help.
 
-the model sees 5 seconds of one road user's movement, then predicts its possible paths over the next 6 seconds. i test whether nearby agents and road-map data help compared with using the target's movement alone.
-
-this uses the public [Argoverse 2 motion forecasting dataset](https://argoverse.github.io/user-guide/tasks/motion_forecasting.html). it uses tracked positions and vector maps, not camera images or anything. each target is predicted on its own.
+this uses [Argoverse 2](https://argoverse.github.io/user-guide/tasks/motion_forecasting.html): tracked positions and vector maps, no images. each target is predicted on its own.
 
 ## what the numbers mean
 
@@ -14,13 +12,11 @@ ADE is just how far the prediction was from what actually happened. lower is bet
 
 A7 gives 6 paths instead of 1. minFDE checks the end of the closest path. Brier-minFDE also checks if the model actually put the good path near the top. the other models only have one path, so that number is the same as minFDE for them.
 
-the `mean +/- std` numbers come from 3 runs. the intervals below compare the same scenes between two models.
+the numbers are from 3 runs. the intervals compare the same scenes between two models.
 
 ## setup
 
-i used 60,000 AV2 scenarios. 50,000 were used for training and 10,000 were kept for checking the models. no scenario appears in both groups.
-
-the models trained for up to 8 epochs with seeds 17, 29, and 43 on an RTX 3070. the full set had 55,053 vehicles, 3,814 pedestrians, and 1,133 cyclists. the dev set had 9,158 vehicles, 669 pedestrians, and 173 cyclists.
+i used 60,000 AV2 scenarios: 50,000 for training and 10,000 for dev. no overlap. the models trained for up to 8 epochs with seeds 17, 29, and 43.
 
 A3 to A7 use the same transformer with the same number of parameters. the only changes are which inputs it can use and how many paths it predicts.
 
@@ -37,19 +33,9 @@ A3 to A7 use the same transformer with the same number of parameters. the only c
 
 ## what a trajectory looks like
 
-this is one real scene from the 10,000-scene dev set. i picked a turning, interactive scene where the 6-path model helped, so the difference is easy to see.
-
-the gray lines are the road map. the blue line is the target's past movement, and the boxes are agents at the current time.
-
-the left side shows the real future. the right side compares it with the one-path model and all 6 paths from A7. the green path is the one used by minADE because it ended up closest to the real future. the model does not know which path is best when it makes the prediction.
+one dev scene. gray is the map, blue is the target history, and boxes are other agents. the green A7 path is the one minADE picked after seeing the real future.
 
 ![One AV2 scene with the map, nearby agents, and predicted trajectories](docs/figures/trajectory_example.png)
-
-## data size
-
-the first pilot only used 2,500 scenarios. this final run uses 60,000, which is 24 times more data.
-
-this is enough for this project, but it is still not the full AV2 benchmark. AV2 has about 250,000 motion-forecasting scenarios in total. i also did not use the official validation split here. the 10,000 dev scenes came from the training split and were kept separate by scenario.
 
 ## results
 
@@ -66,11 +52,11 @@ this is enough for this project, but it is still not the full AV2 benchmark. AV2
 | A6 | 1.9813 +/- 0.0092 |
 | A7 | **1.1517 +/- 0.0170** |
 
-macro minADE is the main result, so the paired confidence intervals are below. the next figure has the endpoint results from the same 10,000-scene dev set. the full table has the averages and spreads across seeds.
+the next figure has endpoint metrics. [full table](experiments/av2_ablation_60k/final/aggregate.md)
 
 ![Final endpoint, ranking, and miss-rate metrics](docs/figures/endpoint_metrics.png)
 
-for A0 to A6, Brier-minFDE is exactly minFDE because they only predict one path. it adds new information for A7: its final minFDE is 3.404 m, while Brier-minFDE is 3.943 m because the model did not always score the best endpoint most highly.
+for A0 to A6, Brier-minFDE equals minFDE because they only predict one path. A7 gets 3.404 m minFDE and 3.943 m Brier-minFDE, so it did not rank the best endpoint very well.
 
 ![Paired minADE changes](docs/figures/component_effects.png)
 
@@ -93,7 +79,7 @@ this is only my 60k split, not the official AV2 benchmark. [full results](experi
 
 ## run it
 
-use Python 3.10 or newer. an NVIDIA GPU is recommended. run these commands from the project folder:
+run this from the project folder:
 
 ```powershell
 python -m pip install -e ".[dev]"
@@ -105,10 +91,4 @@ python scripts/plot_trajectory_example.py
 python -m pytest -q
 ```
 
-the downloader gets the data from the public AV2 bucket. it skips files that are already there. results, settings, checkpoints, predictions, and metrics go in `experiments/av2_ablation_60k/final`.
-
-the finished run used at most 0.361 GB of PyTorch CUDA memory.
-
-## 60k run files
-
-the run is done. see the [run status](experiments/av2_ablation_60k/progress.md) or [full results](experiments/av2_ablation_60k/final/aggregate.md).
+the downloader skips files already there. output goes in `experiments/av2_ablation_60k/final`.
