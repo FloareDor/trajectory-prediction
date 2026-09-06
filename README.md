@@ -87,6 +87,13 @@ the map helps most on turns and intersections. nearby agents are more mixed.
 - A7 has 6 guesses, so its lower minADE is coverage, not better prediction. its first choice was worse than A6's.
 - this is only my 60k split, not the official AV2 benchmark. [full results](experiments/av2_ablation_60k/final/aggregate.md)
 
+## next steps
+
+- predict agents together instead of one at a time
+- make the 6 paths more different and rank them better
+- keep predicted paths on the road and avoid collisions
+- see if the predictions actually help planning
+
 ## run it
 
 run this from the project folder:
