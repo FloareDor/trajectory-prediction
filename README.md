@@ -10,15 +10,11 @@ this uses the public [Argoverse 2 motion forecasting dataset](https://argoverse.
 
 ## what the numbers mean
 
-a trajectory is one possible future path. a mode is one path predicted by the model.
+ADE is just how far the prediction was from what actually happened. lower is better. minADE picks the closest path if the model gives more than one. macro minADE gives the three road-user types the same weight.
 
-- ADE is the average distance between the predicted path and the real path, in metres.
-- minADE takes the best path when the model predicts more than one. lower is better.
-- minFDE is the distance from the best predicted path to the final real point. miss rate is the share farther than 2 m at that point.
-- AV2-style Brier-minFDE adds a penalty when the model gives the best endpoint a low score. it checks both endpoint accuracy and whether the model ranked the good path highly.
-- macro minADE gives vehicles, pedestrians, and cyclists the same weight.
-- `mean +/- std` is the average and spread across 3 runs. A0 always gives the same answer, so it only ran once.
-- the 95% intervals compare the same examples between two models. a negative change is better. if an interval crosses zero, the result is not clear.
+A7 gives 6 paths instead of 1. minFDE checks the end of the closest path. Brier-minFDE also checks if the model actually put the good path near the top. the other models only have one path, so that number is the same as minFDE for them.
+
+the `mean +/- std` numbers come from 3 runs. the intervals below compare the same scenes between two models.
 
 ## setup
 
@@ -87,13 +83,11 @@ for A0 to A6, Brier-minFDE is exactly minFDE because they only predict one path.
 
 ## what i found
 
-in this run, both the map and nearby agents helped. the map made the bigger difference. using both lowered macro minADE by 0.2536 m compared with the target-only transformer.
+the map helped more than nearby agents. both together beat the target-only transformer by 0.2536 m.
 
-predicting 6 possible paths helped the most. A7 got **1.152 m**, compared with **1.981 m** for A6. but there is an important catch: A7's first choice was worse. its first-ranked ADE was 3.391 m, while A6 got 2.910 m. A7's Brier-minFDE was 3.943 m versus its 3.404 m minFDE, which also shows that its mode scores did not consistently rank the good path first. so A7 was better at covering possible futures than choosing the most likely one.
+the 6 paths helped the most. A7 got **1.152 m** and A6 got **1.981 m**. but A7 was worse at picking its first choice: 3.391 m vs 2.910 m. it found good paths, it just did not rank them that well.
 
-this is still not a full AV2 benchmark. it used 60,000 scenarios and only trained for 8 epochs. i also used local metrics, not the official AV2 evaluator. so these results only say what happened in this setup.
-
-the full per-type, time-horizon, and scene results are in [the full results table](experiments/av2_ablation_60k/final/aggregate.md).
+this is only my 60k split, not the official AV2 benchmark. [full results](experiments/av2_ablation_60k/final/aggregate.md)
 
 ## run it
 
