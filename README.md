@@ -83,11 +83,9 @@ the map helps most on turns and intersections. nearby agents are more mixed.
 
 ## what i found
 
-the map helped more than nearby agents. both together beat the target-only transformer by 0.2536 m.
-
-A7 has 6 guesses, so of course its best guess gets a lower minADE: **1.152 m** vs **1.981 m** for A6. that is just coverage. its first choice was worse, 3.391 m vs 2.910 m, so it was not actually better at choosing what would happen.
-
-this is only my 60k split, not the official AV2 benchmark. [full results](experiments/av2_ablation_60k/final/aggregate.md)
+- the map helped more than nearby agents. it helped most on turns and intersections. nearby agents were more mixed.
+- A7 has 6 guesses, so its lower minADE is coverage, not better prediction. its first choice was worse than A6's.
+- this is only my 60k split, not the official AV2 benchmark. [full results](experiments/av2_ablation_60k/final/aggregate.md)
 
 ## run it
 
