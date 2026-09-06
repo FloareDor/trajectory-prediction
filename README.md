@@ -2,7 +2,7 @@
 
 ## what this is
 
-i made this to predict where cars, people, and bikes will go next in autonomous-driving scenes. the model sees 5 seconds of motion and predicts the next 6. i wanted to see if nearby agents and road-map data help.
+i made this to see if nearby agents and road-map data help predict where cars, people, and bikes will go next in autonomous-driving scenes. the model sees 5 seconds of motion and predicts the next 6.
 
 this uses [Argoverse 2](https://argoverse.github.io/user-guide/tasks/motion_forecasting.html): tracked positions and vector maps, no images. each target is predicted on its own.
 
